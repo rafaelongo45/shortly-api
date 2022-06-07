@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 
 import authRouter from "../routers/authRouter.js";
+import urlsRouter from "../routers/urlsRouter.js";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const app = express();
 app.use(express.json());
 
 app.use(authRouter);
+app.use(urlsRouter);
 
 app.listen(
   process.env.PORT || 4000,

@@ -1,8 +1,8 @@
 import { Router } from "express";
 
 import { signin, signup } from "../controllers/authController.js";
-import { validateCredentials, validateCredentialsFormat } from "../middlewares/signinDataValidate.js";
-import { encryptPassword, isRegistered, validateUserData } from "../middlewares/signupDataValidate.js";
+import { validateCredentials, validateCredentialsFormat } from "../middlewares/validateSignin.js";
+import { encryptPassword, isRegistered, validateUserData } from "../middlewares/validateSignup.js";
 
 const authRouter = Router();
 
