@@ -22,3 +22,14 @@ export async function insertUrl(req,res){
     return res.sendStatus(500);
   }
 };
+
+export function sendSelectedUrl(req,res){
+  const { selectedUrl } = res.locals;
+  const structuredResponse = {
+    "id": selectedUrl.id,
+    "shortUrl": selectedUrl.shortenedUrl,
+    "url": selectedUrl.originalUrl
+  }
+
+  return res.status(200).send(structuredResponse);
+}

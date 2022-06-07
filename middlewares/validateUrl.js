@@ -17,4 +17,4 @@ export function validateUrl(req,res,next){
 
   res.locals.url = url;
   next();
-}
+};
