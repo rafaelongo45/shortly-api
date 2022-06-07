@@ -49,4 +49,21 @@ export async function updateCountRedirectLink(req,res){
     console.log(chalk.bold.red('Erro no servidor'), e);
     return res.sendStatus(500);
   }
+};
+
+export async function deleteLink(req,res){
+  const { selectedUrl } = res.locals;
+
+  console.log(selectedUrl)
+  try {
+    await connection.query(`
+      DELETE FROM links
+      WHERE id = $1;
+    `, [selectedUrl.id]);
+
+    return res.sendStatus(204);
+  } catch (e) {
+    console.log(chalk.bold.red('Erro no servidor'), e);
+    return res.sendStatus(500);
+  }
 }
