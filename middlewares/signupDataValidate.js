@@ -44,7 +44,7 @@ export async function isRegistered(req,res,next){
     const user = await connection.query(`
       SELECT users.email 
       FROM users
-      WHERE email = $1
+      WHERE email = $1;
     `, [email]);
 
     if(user.rows.length !== 0){
