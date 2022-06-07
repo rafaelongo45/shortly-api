@@ -32,4 +32,21 @@ export function sendSelectedUrl(req,res){
   }
 
   return res.status(200).send(structuredResponse);
+};
+
+export async function updateCountRedirectLink(req,res){
+  const { linkInformation } = res.locals;
+
+  try {
+    await connection.query(`
+      UPDATE links 
+      SET visits = visits + 1
+      WHERE id = $1
+    `, [linkInformation.id]);
+
+    res.redirect(`${linkInformation.originalUrl}`)
+  } catch (e) {
+    console.log(chalk.bold.red('Erro no servidor'), e);
+    return res.sendStatus(500);
+  }
 }

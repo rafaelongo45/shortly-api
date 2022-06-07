@@ -1,5 +1,7 @@
 import joi from "joi";
 
+import connection from "../db.js";
+
 export function validateUrl(req,res,next){
   const { url } = req.body;
   const regex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
@@ -18,3 +20,27 @@ export function validateUrl(req,res,next){
   res.locals.url = url;
   next();
 };
+
+export async function checkUrlExists(req,res,next){
+  const { shortUrl } = req.params;
+
+  try {
+    const request = await connection.query(`
+      SELECT * 
+      FROM links
+      WHERE "shortenedUrl" = $1;
+    `, [shortUrl]);
+
+    const linkInformation = request.rows[0];
+
+    if(!linkInformation){
+      return res.sendStatus(404);
+    }
+
+    res.locals.linkInformation = linkInformation;
+    next();
+  } catch (e) {
+    console.log(chalk.bold.red('Erro no servidor'), e);
+    return res.sendStatus(500);
+  }
+}
