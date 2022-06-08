@@ -4,6 +4,7 @@ import express from "express";
 
 import authRouter from "../routers/authRouter.js";
 import urlsRouter from "../routers/urlsRouter.js";
+import userRouter from "../routers/usersRouter.js";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use(authRouter);
 app.use(urlsRouter);
+app.use(userRouter);
 
 app.listen(
   process.env.PORT || 4000,
