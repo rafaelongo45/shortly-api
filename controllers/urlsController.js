@@ -54,7 +54,6 @@ export async function updateCountRedirectLink(req,res){
 export async function deleteLink(req,res){
   const { selectedUrl } = res.locals;
 
-  console.log(selectedUrl)
   try {
     await connection.query(`
       DELETE FROM links

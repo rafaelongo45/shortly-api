@@ -15,9 +15,6 @@ export async function isUrlCreator(req,res,next){
 
     const userUrls = request.rows;
 
-    console.log(userUrls)
-    console.log(id)
-
     const selectedUrl = userUrls.find(url => url.id === parseInt(id));
 
     if(!selectedUrl){

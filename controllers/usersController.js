@@ -15,7 +15,6 @@ export async function getUserData(req,res){
     GROUP BY users.id;
     `, [id]);
     const user = userRequest.rows[0];
-    console.log(user)
 
     const userLinksRequest = await connection.query(`
       SELECT links.id, links."shortenedUrl" as "shortUrl", links."originalUrl" as url, links.visits as "visitCount"
