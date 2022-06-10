@@ -1,6 +1,6 @@
 import joi from "joi";
 
-import connection from "../db.js";
+import { urlsRepository } from "../repositories/urlsRepository.js";
 
 export function validateUrl(req,res,next){
   const { url } = req.body;
@@ -25,12 +25,7 @@ export async function checkUrlExists(req,res,next){
   const { shortUrl } = req.params;
 
   try {
-    const request = await connection.query(`
-      SELECT * 
-      FROM links
-      WHERE "shortenedUrl" = $1;
-    `, [shortUrl]);
-
+    const request = await urlsRepository.checkUrl(shortUrl);
     const linkInformation = request.rows[0];
 
     if(!linkInformation){

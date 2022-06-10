@@ -3,6 +3,7 @@ import chalk from "chalk";
 import bcrypt from "bcrypt";
 
 import connection from "../db.js";
+import { authRepository } from "../repositories/authRepository.js";
 
 export function validateUserData(req,res,next){
   const { name, email, password, confirmPassword } = req.body;
@@ -41,11 +42,7 @@ export async function isRegistered(req,res,next){
   const { email } = req.body;
 
   try {
-    const user = await connection.query(`
-      SELECT users.email 
-      FROM users
-      WHERE email = $1;
-    `, [email]);
+    const user = await authRepository.checkIfRegistered(email);
 
     if(user.rows.length !== 0){
       return res.status(409).send('E-mail already registered');

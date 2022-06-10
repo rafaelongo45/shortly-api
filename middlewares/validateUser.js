@@ -1,17 +1,12 @@
 import chalk from "chalk";
 
-import connection from "../db.js";
+import { usersRepository } from "../repositories/usersRepository.js";
 
 export async function userExists(req,res,next){
   const { id } = req.params;
 
   try {
-    const request = await connection.query(`
-      SELECT *
-      FROM users
-      WHERE id = $1;
-    `, [id]);
-
+    const request = await usersRepository.checkIfUserExists(id);
     const users = request.rows[0];
 
     if(!users){

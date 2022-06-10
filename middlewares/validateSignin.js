@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 
 import connection from "../db.js";
+import { authRepository } from "../repositories/authRepository.js";
 
 export function validateCredentialsFormat(req,res,next){
   const { email, password } = req.body;
@@ -30,12 +31,7 @@ export async function validateCredentials(req,res,next){
   const { email, password } = req.body;
 
   try {
-    const request = await connection.query(`
-      SELECT * 
-      FROM users
-      WHERE email = $1;
-    `, [email]);
-
+    const request = await authRepository.checkUserCredentials(email);
     const user = request.rows[0];
 
     if(!user || !bcrypt.compareSync(password, user.password)){

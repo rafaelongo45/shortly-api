@@ -1,17 +1,11 @@
 import chalk from "chalk";
-
-import connection from "../db.js";
+import { authRepository } from "../repositories/authRepository.js";
 
 export async function isIdValid(req,res,next){
   const { id } = req.params;
 
   try {
-    const request = await connection.query(`
-      SELECT *
-      FROM links
-      WHERE id = $1
-    `, [id]);
-
+    const request = await authRepository.checkId(id);
     const selectedUrl = request.rows[0];
 
     if(!selectedUrl){

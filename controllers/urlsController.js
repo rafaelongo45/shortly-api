@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { nanoid } from "nanoid";
 
-import connection from "../db.js";
+import { urlsRepository } from "../repositories/urlsRepository.js";
 
 export async function insertUrl(req,res){
   const { userId, url } = res.locals;
@@ -11,11 +11,7 @@ export async function insertUrl(req,res){
   }
   
   try {
-    await connection.query(`
-      INSERT INTO links("creatorId", "originalUrl", "shortenedUrl")
-      VALUES($1, $2, $3)
-    `, [userId, url, shortenedUrl]);
-
+    await urlsRepository.postUrl(userId, url, shortenedUrl);
     return res.status(201).send(generatedUrl);
   } catch (e) {
     console.log(chalk.bold.red('Erro no servidor'), e);
@@ -38,12 +34,7 @@ export async function updateCountRedirectLink(req,res){
   const { linkInformation } = res.locals;
 
   try {
-    await connection.query(`
-      UPDATE links 
-      SET visits = visits + 1
-      WHERE id = $1
-    `, [linkInformation.id]);
-
+    await urlsRepository.updateCount(linkInformation);
     res.redirect(`${linkInformation.originalUrl}`)
   } catch (e) {
     console.log(chalk.bold.red('Erro no servidor'), e);
@@ -55,11 +46,7 @@ export async function deleteLink(req,res){
   const { selectedUrl } = res.locals;
 
   try {
-    await connection.query(`
-      DELETE FROM links
-      WHERE id = $1;
-    `, [selectedUrl.id]);
-
+    await urlsRepository.deleteLink(selectedUrl);
     return res.sendStatus(204);
   } catch (e) {
     console.log(chalk.bold.red('Erro no servidor'), e);

@@ -1,20 +1,14 @@
 import chalk from "chalk";
 
-import connection from "../db.js";
+import { urlsRepository } from "../repositories/urlsRepository.js";
 
 export async function isUrlCreator(req,res,next){
   const { id } = req.params;
   const { userId } = res.locals;
 
   try {
-    const request = await connection.query(`
-      SELECT *
-      FROM links
-      WHERE "creatorId" = $1;
-    `, [userId]);
-
+    const request = await urlsRepository.checkCreator(userId);
     const userUrls = request.rows;
-
     const selectedUrl = userUrls.find(url => url.id === parseInt(id));
 
     if(!selectedUrl){

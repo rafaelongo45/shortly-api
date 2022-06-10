@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import connection from "../db.js";
+import { usersRepository } from "../repositories/usersRepository.js";
 
 export async function validateToken(req,res,next){
   const { authorization } = req.headers;
@@ -11,11 +11,7 @@ export async function validateToken(req,res,next){
   }
 
   try {
-    const request = await connection.query(`
-      SELECT * 
-      FROM sessions
-      WHERE token = $1
-    `, [token]);
+    const request = await usersRepository.checkToken(token);
 
     const userSession = request.rows[0];
 
