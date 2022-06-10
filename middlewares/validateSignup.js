@@ -2,7 +2,6 @@ import joi from "joi";
 import chalk from "chalk";
 import bcrypt from "bcrypt";
 
-import connection from "../db.js";
 import { authRepository } from "../repositories/authRepository.js";
 
 export function validateUserData(req,res,next){

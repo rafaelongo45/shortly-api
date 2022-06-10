@@ -1,4 +1,5 @@
 import chalk from "chalk";
+
 import { authRepository } from "../repositories/authRepository.js";
 
 export async function isIdValid(req,res,next){

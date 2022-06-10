@@ -3,7 +3,6 @@ import chalk from "chalk";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 
-import connection from "../db.js";
 import { authRepository } from "../repositories/authRepository.js";
 
 export function validateCredentialsFormat(req,res,next){

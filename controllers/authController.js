@@ -20,7 +20,7 @@ export async function signin(req,res){
 
   try {
     await authRepository.postSignIn(token, user);
-    return res.status(200).send(token);
+    return res.status(200).send({token, userId: user.id, name: user.name});
   } catch (e) {
     console.log(chalk.bold.red('Erro no servidor'), e);
     return res.sendStatus(500);
