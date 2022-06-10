@@ -7,26 +7,36 @@ export async function getUserData(req,res){
 
   try {
     const userRequest = await connection.query(`
-    SELECT users.id, users.name, SUM(COALESCE(links.visits, 0)) as "visitCount"
+    SELECT users.id, users.name, SUM(COALESCE(li.visits, 0)) as "visitCount", l.id as "linkId", l."shortenedUrl" as "shortUrl", l."originalUrl" as url, l.visits as "linkVisits"
     FROM users
-    LEFT JOIN links
-    ON users.id = links."creatorId"
+    LEFT JOIN links as li
+    ON users.id = li."creatorId"
+    LEFT JOIN links as l
+    ON l."creatorId" = users.id
     WHERE users.id = $1
-    GROUP BY users.id;
+    GROUP BY users.id, l.id;
     `, [id]);
-    const user = userRequest.rows[0];
+    const userData = userRequest.rows;
 
-    const userLinksRequest = await connection.query(`
-      SELECT links.id, links."shortenedUrl" as "shortUrl", links."originalUrl" as url, links.visits as "visitCount"
-      FROM links
-      WHERE links."creatorId" = $1;
-    `, [id]);
-    const userLinks = userLinksRequest.rows;
+    const userLinks = [];
+
+    userData.forEach(userData => {
+      if(userData.linkId === null){
+        return
+      }
+      
+      userLinks.push({
+          id: userData.linkId,
+          shortUrl: userData.shortUrl,
+          url: userData.url,
+          visitCount: userData.linkVisits
+      })
+    })
 
     const userStructure = {
-      "id": user.id,
-      "name": user.name,
-      "visitCount": user.visitCount,
+      "id": userData[0].id,
+      "name": userData[0].name,
+      "visitCount": userData.visitCount,
       "shortenedUrls": userLinks
     };
 
