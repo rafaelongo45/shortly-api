@@ -18,5 +18,5 @@ app.use(userRouter);
 
 app.listen(
   process.env.PORT || 4000,
-  () => console.log(chalk.bold.blue(`Servidor rodando na prota ${process.env.PORT}`))
+  () => console.log(chalk.bold.blue(`Servidor rodando na porta ${process.env.PORT}`))
 );
